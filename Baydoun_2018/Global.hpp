@@ -10,6 +10,6 @@
 
 #include <complex>
 
-std::complex<long double> multyplyComplexNumbersFMA(std::complex<long double> a, std::complex<long double> b);
+std::complex<long double> multiplyComplexNumbersFMA(std::complex<long double> a, std::complex<long double> b);
 
 #endif /* Global_hpp */

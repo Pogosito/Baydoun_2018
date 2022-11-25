@@ -20,17 +20,17 @@ int main(int argc, const char * argv[]) {
 
 	std::vector<std::complex<long double>> arr = complexPolynom.calculateRoots();
 	for (int i = 0; i < arr.size(); ++i) {
-		std::cout << arr[i] << std::endl;
+		std::cout << "root " << arr[i] << std::endl;
 	}
 
-	std::cout << "-----------------" << std::endl;
+	std::cout << " -----------------" << std::endl;
 
-	CubicPolynomialFMA complexPolynomFMA = CubicPolynomialFMA(-2.0L, 1.0L, 2.0L);
+	CubicPolynomialFMA <long double>helper(-2.0L, 1.0L, 2.0L);
 
-	std::vector<std::complex<long double>> arrFMA = complexPolynom.calculateRoots();
+	std::vector<std::complex<long double>> arrFMA = helper.calculateRoots();
 	for (int i = 0; i < arrFMA.size(); ++i) {
-		std::cout << arrFMA[i] << std::endl;
+		std::cout << "root fma " << arrFMA[i] << std::endl;
 	}
-
+	
 	return 0;
 }

@@ -22,8 +22,7 @@ CubicPolynomial::CubicPolynomial(std::complex<long double> b,
 void CubicPolynomial::calculeteAllCoiffecents(std::complex<long double> b,
 											  std::complex<long double> c,
 											  std::complex<long double> d) {
-
-	squareOfB = pow(b, 2);
+	squareOfB = b * b;
 	cubeOfB = squareOfB * b;
 	fourthDegreeOfB = pow(squareOfB, 2);
 
@@ -52,14 +51,14 @@ void CubicPolynomial::calculeteAllCoiffecents(std::complex<long double> b,
 std::vector<std::complex<long double>> CubicPolynomial::calculateRoots() {
 	const std::complex<long double> ms1 = { -1, 0 };
 	const std::complex<long double> ms2 = { 1.0 / 2.0, -sqrt(3) / 2.0 };
-	const std::complex<long double> ms3 = { 1.0 / 2.0, sqrt(3) / 2.0 };
+	const std::complex<long double> ms3 = std::conj(ms2);
 
 	const std::vector<std::complex<long double>> ms = {ms1, ms2, ms3};
 	std::vector<std::complex<long double>> result;
 
 	for(std::complex<long double> m: ms) {
 		std::complex<long double> xm = m * alpha1 * R1 + m * m * alpha2 * R2 - b / 3.0L;
-		m == ms3 ? result.push_back(xm.real()) : result.push_back(xm);
+		result.push_back(xm);
 	}
 
 	return result;
@@ -132,7 +131,7 @@ std::complex<long double> CubicPolynomial::calculateSmallDeltaL() {
 std::complex<long double> CubicPolynomial::calculateA1() {
 	const std::complex<long double> firstBracket = 4.0L * cubeOfB * c - 2.0L * d * squareOfB - 13.0L * b * squareOfC + 15.0L * d * c;
 	const std::complex<long double> helper(firstBracket.real(), 0);
-	const std::complex<long double> firstMember = std::complex<long double>(0, (-2.0L * sqrt(3L)) / 3.0L) * helper;
+	const std::complex<long double> firstMember = std::complex<long double>(0, (-2.0L * sqrt(3.0L)) / 3.0L) * helper;
 	const std::complex<long double> secondMember = 2.0L * c * sqrtOfDelta0;
 	const std::complex<long double> result = firstMember + secondMember;
 
@@ -142,7 +141,7 @@ std::complex<long double> CubicPolynomial::calculateA1() {
 
 // A2
 std::complex<long double> CubicPolynomial::calculateA2() {
-	const std::complex<long double> firstMember = 8.0L * multiplicationsOfBAndC * fourthDegreeOfB;
+	const std::complex<long double> firstMember = 8.0L * multiplicationsOfSquaresBAndC * cubeOfB;
 	const std::complex<long double> secondMember = 8.0L * multiplicationsOfBAndC * cubeOfB * d;
 	const std::complex<long double> thirdMember = 40.0L * multiplicationsOfSquaresBAndC * multiplicationsOfBAndC;
 	const std::complex<long double> fourthMember = 2.0L * cubeOfB * squareOfD;
@@ -158,12 +157,14 @@ std::complex<long double> CubicPolynomial::calculateA2() {
 	const std::complex<long double> secondHalf = sixthMember - seventhMember - eightMember + ninthMember;
 	
 	const std::complex<long double> helper2((8.0L * multiplicationsOfSquaresBAndC - 10.0L * multiplicationsOfBAndC * d + cubeOfC + 3.0L * squareOfD).real(), 0);
-	const std::complex<long double> tenthMember = std::complex<long double>(0, sqrt(3L)) * helper2 * sqrtOfDelta0;
+	const std::complex<long double> tenthMember = std::complex<long double>(0, sqrt(3.0L)) * helper2 * sqrtOfDelta0;
 
 	const std::complex<long double> result = helper + secondHalf - tenthMember;
 
-//	std::cout << "A2 = " << result << std::endl;
-	return result;
+	const std::complex<long double> helper3 = std::complex<long double>(result.real(), 0);
+
+//	std::cout << "A2 = " << helper3 << std::endl;
+	return helper3;
 }
 
 // MARK: - Theorem 3.3
@@ -176,7 +177,7 @@ std::complex<long double> CubicPolynomial::calculateR(bool isR1) {
 
 	const std::complex<long double> result = isR1 ? pow(firstMember + helper, 1.0L / 3.0L) : pow(firstMember - helper, 1.0L / 3.0L);
 
-//	std::string r = isR1 ? "R1 = " : "R2 = ";
+	std::string r = isR1 ? "R1 = " : "R2 = ";
 //	std::cout << r << result << std::endl;
 	return result;
 }
@@ -192,13 +193,14 @@ std::complex<long double> CubicPolynomial::calculateAlpha1() {
 
 	const std::complex<long double> result = alphaCoefficient * exp(std::complex<long double>(0, argsDiff));
 
-//	std::cout << "α1 fma = " << result << std::endl;
+//	std::cout << "α1 = " << result << std::endl;
 	return result;
 }
 
 // α2
 std::complex<long double> CubicPolynomial::calculateAlpha2() {
 	const std::complex<long double> firstBracket = A2 * pow(smallDeltaL, 2.0L / 3.0L);
+
 	const std::complex<long double> secondBracket = d_0 * d_0 * R2;
 
 	const long double arg1 = std::arg(firstBracket);
@@ -207,6 +209,6 @@ std::complex<long double> CubicPolynomial::calculateAlpha2() {
 	const long double argsDiff = arg1 - arg2;
 	const std::complex<long double> result = alphaCoefficient * exp(std::complex<long double>(0, argsDiff));
 
-//	std::cout << "α2 fma = " << result << std::endl;
+//	std::cout << "α2 = " << result << std::endl;
 	return result;
 }

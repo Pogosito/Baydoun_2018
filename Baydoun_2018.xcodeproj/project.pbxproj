@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		048F6E05290A977400F9EBDB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 048F6E04290A977400F9EBDB /* main.cpp */; };
 		048F6E0D290AB55300F9EBDB /* CubicPolynomial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 048F6E0B290AB55300F9EBDB /* CubicPolynomial.cpp */; };
-		4892BB3229255CEF00BE6F4F /* CubicPolynomialFMA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.cpp */; };
+		4892BB3229255CEF00BE6F4F /* CubicPolynomialFMA.tpp in Sources */ = {isa = PBXBuildFile; fileRef = 4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.tpp */; };
 		48C5C063292AE839001F48E5 /* Global.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48C5C061292AE839001F48E5 /* Global.cpp */; };
 /* End PBXBuildFile section */
 
@@ -31,7 +31,7 @@
 		048F6E04290A977400F9EBDB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		048F6E0B290AB55300F9EBDB /* CubicPolynomial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CubicPolynomial.cpp; sourceTree = "<group>"; };
 		048F6E0C290AB55300F9EBDB /* CubicPolynomial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubicPolynomial.hpp; sourceTree = "<group>"; };
-		4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CubicPolynomialFMA.cpp; sourceTree = "<group>"; };
+		4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = CubicPolynomialFMA.tpp; sourceTree = "<group>"; };
 		4892BB3129255CEF00BE6F4F /* CubicPolynomialFMA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubicPolynomialFMA.hpp; sourceTree = "<group>"; };
 		48C5C061292AE839001F48E5 /* Global.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Global.cpp; sourceTree = "<group>"; };
 		48C5C062292AE839001F48E5 /* Global.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Global.hpp; sourceTree = "<group>"; };
@@ -88,7 +88,7 @@
 		4892BB3329255CFA00BE6F4F /* CubicPolynomialFMA */ = {
 			isa = PBXGroup;
 			children = (
-				4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.cpp */,
+				4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.tpp */,
 				4892BB3129255CEF00BE6F4F /* CubicPolynomialFMA.hpp */,
 			);
 			name = CubicPolynomialFMA;
@@ -163,7 +163,7 @@
 				48C5C063292AE839001F48E5 /* Global.cpp in Sources */,
 				048F6E05290A977400F9EBDB /* main.cpp in Sources */,
 				048F6E0D290AB55300F9EBDB /* CubicPolynomial.cpp in Sources */,
-				4892BB3229255CEF00BE6F4F /* CubicPolynomialFMA.cpp in Sources */,
+				4892BB3229255CEF00BE6F4F /* CubicPolynomialFMA.tpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,20 +282,28 @@
 		048F6E09290A977400F9EBDB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_VERSION = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 			};
 			name = Debug;
 		};
 		048F6E0A290A977400F9EBDB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_VERSION = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 			};
 			name = Release;
 		};

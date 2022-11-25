@@ -11,17 +11,16 @@
 #include <stdio.h>
 #include <complex>
 
+template<class f_pt>
 class CubicPolynomialFMA final {
 
 // MARK: - Public
 
 public:
 
-	CubicPolynomialFMA(long double b,
-					   long double c,
-					   long double d);
+	CubicPolynomialFMA(f_pt b, f_pt c, f_pt d);
 
-	std::vector<std::complex<long double>> calculateRoots();
+	std::vector<std::complex<f_pt>> calculateRoots();
 
 // MARK: - Private
 
@@ -29,69 +28,68 @@ private:
 
 	// MARK: - Coefficients
 
-	void calculateAllCoefficients(long double b,
-								 long double c,
-								 long double d);
+	void calculateAllCoefficients(f_pt b, f_pt c, f_pt d);
 
 	// B
-	long double b;
-	long double squareOfb;
-	long double cubeOfb;
+	f_pt b;
+	f_pt squareOfb;
+	f_pt cubeOfb;
 
 	// C
-	long double c;
-	long double squareOfC;
-	long double cubeOfC;
+	f_pt c;
+	f_pt squareOfC;
+	f_pt cubeOfC;
 
 	// D
-	long double d;
-	long double squareOfD;
-	long double cubeOfd;
+	f_pt d;
+	f_pt squareOfD;
+	f_pt cubeOfd;
 
 	// Helpers
-	std::complex<long double> sqrtOfDelta0;
-	long double d_0;
-	std::complex<long double> coefficient;
-	long double smallDeltaL;
-	long double A1;
-	long double A2;
-	std::complex<long double> R1;
-	std::complex<long double> R2;
-	std::complex<long double> alphaCoefficient;
-	std::complex<long double> alpha1;
-	std::complex<long double> alpha2;
+	std::complex<f_pt> sqrtOfDelta0;
+	f_pt d_0;
+	std::complex<f_pt> coefficient;
+	std::complex<f_pt> smallDeltaL;
+	f_pt A1;
+	f_pt A2;
+	std::complex<f_pt> R1;
+	std::complex<f_pt> R2;
+	std::complex<f_pt> alphaCoefficient;
+	std::complex<f_pt> alpha1;
+	std::complex<f_pt> alpha2;
 
 	// MARK: - Definition 3.1
 
 	// ∆o
-	long double calculateDelta0();
+	f_pt calculateDelta0();
 	
 	// d_0
-	long double calculateD0();
+	f_pt calculateD0();
 
 	// ∆l
-	long double calculateDeltaL();
+	f_pt calculateDeltaL();
 
 	// MARK: - Definition 3.2
 
 	// δl
-	long double calculateSmallDeltaL();
+	std::complex<f_pt> calculateSmallDeltaL();
 
 	// A2
-	long double calculateA1();
+	f_pt calculateA1();
 
 	// A2
-	long double calculateA2();
+	f_pt calculateA2();
 
 	// MARK: - Theorem 3.3
 
-	std::complex<long double> calculateR(bool isR1);
+	std::complex<f_pt> calculateR(bool isR1);
 
 	// α1
-	std::complex<long double> calculateAlpha1();
+	std::complex<f_pt> calculateAlpha1();
 
 	// α2
-	std::complex<long double> calculateAlpha2();
+	std::complex<f_pt> calculateAlpha2();
 };
 
+#include "CubicPolynomialFMA.tpp"
 #endif /* CubicPolynomialFMA_hpp */
