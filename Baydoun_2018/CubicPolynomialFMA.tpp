@@ -34,13 +34,13 @@ void CubicPolynomialFMA<f_pt>::calculateAllCoefficients(f_pt b, f_pt c, f_pt d) 
 	sqrtOfDelta0 = (delta0 > 0) ? sqrt(delta0) : std::complex<f_pt>(0, sqrt(abs(delta0)));
 
 	d_0 = calculateD0();
-	coefficient = std::complex<f_pt>(0, sqrt(3.0L)) / 9.0L;
+	coefficient = std::complex<f_pt>(0, sqrt(3.0)) / std::complex<f_pt>(9.0, 0);
 	smallDeltaL = calculateSmallDeltaL();
 	A1 = calculateA1();
 	A2 = calculateA2();
 	R1 = calculateR(true);
 	R2 = calculateR(false);
-	alphaCoefficient = pow(4, 1.0L / 3.0L) / 2.0L;
+	alphaCoefficient = pow(4, 1.0 / 3.0) / 2.0;
 	alpha1 = calculateAlpha1();
 	alpha2 = calculateAlpha2();
 }
@@ -48,7 +48,7 @@ void CubicPolynomialFMA<f_pt>::calculateAllCoefficients(f_pt b, f_pt c, f_pt d) 
 template<typename f_pt>
 std::vector<std::complex<f_pt>> CubicPolynomialFMA<f_pt>::calculateRoots() {
 	const std::complex<f_pt> ms1 = { -1, 0 };
-	const std::complex<f_pt> ms2 = { 1.0 / 2.0, -sqrt(3) / 2.0 };
+	const std::complex<f_pt> ms2 = { 1.0 / 2.0, static_cast<f_pt>(-sqrt(3.0) / static_cast<f_pt>(2.0)) };
 	const std::complex<f_pt> ms3 = std::conj(ms2);
 
 	const std::vector<std::complex<f_pt>> ms = {ms1, ms2, ms3};
@@ -61,7 +61,7 @@ std::vector<std::complex<f_pt>> CubicPolynomialFMA<f_pt>::calculateRoots() {
 		std::complex<f_pt> alpha2R2 = multiplyComplexNumbersFMA(alpha2, R2);
 		std::complex<f_pt> squareOfMAlpha2R2 = multiplyComplexNumbersFMA(squareOfM, alpha2R2);
 
-		std::complex<f_pt> xm = mAlpha1R1 + squareOfMAlpha2R2 - b / 3.0L;
+		std::complex<f_pt> xm = mAlpha1R1 + squareOfMAlpha2R2 - std::complex<f_pt>(b, 0) / std::complex<f_pt>(3.0, 0);
 		result.push_back(xm);
 	}
 
@@ -134,8 +134,10 @@ std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateSmallDeltaL() {
 // A1
 template<typename f_pt>
 f_pt CubicPolynomialFMA<f_pt>::calculateA1() {
-	const std::complex<f_pt> firstMember = std::complex<f_pt>(0, (-2.0L * sqrt(3.0L)) / 3.0L) * std::fmal(b * c, std::fmal(4, squareOfb, -13 * c), -d * fmal(2, squareOfb, -15 * c));
-	const std::complex<f_pt> secondMember = 2.0L * c * sqrtOfDelta0;
+	const std::complex<f_pt> firstMember_1 = std::complex<f_pt>(0, (-2.0 * static_cast<f_pt>(sqrt(3.0))) / 3.0);
+	const std::complex<f_pt> firstMember_2	= std::complex<f_pt>(std::fmal(b * c, std::fmal(4, squareOfb, -13 * c), -d * fmal(2, squareOfb, -15 * c)), 0);
+	const std::complex<f_pt> firstMember = firstMember_1 * firstMember_2;
+	const std::complex<f_pt> secondMember =  static_cast<f_pt>(2.0) * static_cast<f_pt>(c) * sqrtOfDelta0;
 	const std::complex<f_pt> result = firstMember + secondMember;
 
 //	std::cout << "A1 fma = " << result << std::endl;
@@ -149,7 +151,7 @@ f_pt CubicPolynomialFMA<f_pt>::calculateA2() {
 
 	const f_pt secondHalf = std::fmal(b * c, std::fmal(23, cubeOfC, -99 * squareOfD), -d * fmal(21, cubeOfC, -27 * squareOfD));
 	const f_pt bracket = std::fmal(squareOfC, std::fmal(8, squareOfb, c), d * std::fmal(3, d, -10 * b * c));
-	const f_pt tenthMember = (std::complex<f_pt>(0, sqrt(3.0L)) * bracket * sqrtOfDelta0).real();
+	const f_pt tenthMember = (std::complex<f_pt>(0, sqrt(3.0)) * bracket * sqrtOfDelta0).real();
 
 	const f_pt result = firstHalf + secondHalf - tenthMember;
 
@@ -163,9 +165,11 @@ f_pt CubicPolynomialFMA<f_pt>::calculateA2() {
 template<typename f_pt>
 std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateR(bool isR1) {
 	const std::complex<f_pt> firstMember = coefficient * sqrtOfDelta0;
-	const std::complex<f_pt> secondMember = (2 * cubeOfb - 9 * std::fmal(c, b, -3 * d)) / 27.0L;
+	const std::complex<f_pt> secondMember = (2 * cubeOfb - 9 * std::fmal(c, b, -3 * d)) / 27.0;
 
-	const std::complex<f_pt> result = isR1 ? pow(firstMember + secondMember, 1.0L / 3.0L) : pow(firstMember - secondMember, 1.0L / 3.0L);
+	const std::complex<f_pt> result = isR1
+	? pow(firstMember + secondMember, static_cast<f_pt>(1.0 / 3.0))
+	: pow(firstMember - secondMember, static_cast<f_pt>(1.0 / 3.0));
 	std::string r = isR1 ? "R1 fma = " : "R2 fma = ";
 
 //	std::cout << r << result << std::endl;
@@ -175,7 +179,7 @@ std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateR(bool isR1) {
 // α1
 template<typename f_pt>
 std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateAlpha1() {
-	const std::complex<f_pt> firstBracket = std::complex<long double>(0, A1) * pow(smallDeltaL, 1.0L / 3.0L);
+	const std::complex<f_pt> firstBracket = std::complex<f_pt>(0, A1) * pow(smallDeltaL, static_cast<f_pt>(1.0 / 3.0));
 	const std::complex<f_pt> secondBracket = -d_0 * R1;
 
 	const f_pt arg1 = std::arg(firstBracket);
@@ -191,7 +195,7 @@ std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateAlpha1() {
 // α2
 template<typename f_pt>
 std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateAlpha2() {
-	const std::complex<f_pt> firstBracket = A2 * pow(smallDeltaL, 2.0L / 3.0L);
+	const std::complex<f_pt> firstBracket = A2 * pow(smallDeltaL, static_cast<f_pt>(2.0 / 3.0));
 	const std::complex<f_pt> secondBracket = d_0 * d_0 * R2;
 
 	const f_pt arg1 = std::arg(firstBracket);

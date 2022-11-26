@@ -10,6 +10,8 @@
 
 #include <complex>
 
-std::complex<long double> multiplyComplexNumbersFMA(std::complex<long double> a, std::complex<long double> b);
+template<typename f_pt>
+std::complex<f_pt> multiplyComplexNumbersFMA(std::complex<f_pt> a, std::complex<f_pt> b);
 
+#include "Global.tpp"
 #endif /* Global_hpp */

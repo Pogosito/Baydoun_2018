@@ -18,6 +18,10 @@ class CubicPolynomialFMA final {
 
 public:
 
+	f_pt b;
+	f_pt c;
+	f_pt d;
+
 	CubicPolynomialFMA(f_pt b, f_pt c, f_pt d);
 
 	std::vector<std::complex<f_pt>> calculateRoots();
@@ -31,17 +35,15 @@ private:
 	void calculateAllCoefficients(f_pt b, f_pt c, f_pt d);
 
 	// B
-	f_pt b;
 	f_pt squareOfb;
 	f_pt cubeOfb;
 
 	// C
-	f_pt c;
+
 	f_pt squareOfC;
 	f_pt cubeOfC;
 
 	// D
-	f_pt d;
 	f_pt squareOfD;
 	f_pt cubeOfd;
 
