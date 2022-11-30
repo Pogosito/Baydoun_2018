@@ -34,9 +34,9 @@
 		048F6E04290A977400F9EBDB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		048F6E0B290AB55300F9EBDB /* CubicPolynomial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CubicPolynomial.cpp; sourceTree = "<group>"; };
 		048F6E0C290AB55300F9EBDB /* CubicPolynomial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubicPolynomial.hpp; sourceTree = "<group>"; };
-		4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = CubicPolynomialFMA.tpp; sourceTree = "<group>"; };
+		4892BB3029255CEF00BE6F4F /* CubicPolynomialFMA.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = CubicPolynomialFMA.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		4892BB3129255CEF00BE6F4F /* CubicPolynomialFMA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubicPolynomialFMA.hpp; sourceTree = "<group>"; };
-		48C5C061292AE839001F48E5 /* Global.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = Global.tpp; sourceTree = "<group>"; };
+		48C5C061292AE839001F48E5 /* Global.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = Global.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		48C5C062292AE839001F48E5 /* Global.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Global.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

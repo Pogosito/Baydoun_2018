@@ -37,11 +37,13 @@ private:
 	// B
 	f_pt squareOfb;
 	f_pt cubeOfb;
+	f_pt biquadrateOfB;
 
 	// C
 
 	f_pt squareOfC;
 	f_pt cubeOfC;
+	f_pt biquadrateOfC;
 
 	// D
 	f_pt squareOfD;

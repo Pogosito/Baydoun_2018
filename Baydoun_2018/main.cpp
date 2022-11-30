@@ -70,7 +70,7 @@ void smallTest() {
 }
 
 template<typename fp_t>
-auto testPolynomial(unsigned int roots_count) {
+std::vector<fp_t> testPolynomial(unsigned int roots_count) {
 	fp_t max_absolute_error, max_relative_error;
 	std::vector<fp_t> roots(roots_count), coefficients(roots_count + 1);
 	generate_polynomial<fp_t>(roots_count, 0, roots_count, 0, MAX_DISTANCE, -1, 1, roots, coefficients);
@@ -83,40 +83,31 @@ auto testPolynomial(unsigned int roots_count) {
 
 	std::vector<std::complex<fp_t>> helperRoots = { std::complex<fp_t>(myRoots[indexOfRealRoot].real(), 0) };
 
-//	for (int i = 0; i < myRoots.size(); ++i) {
-//		std::cout << myRoots[i] << std::endl;
-//	}
-//	std::cout << "Real root " << myRoots[indexOfRealRoot] << std::endl;
-//	std::cout << " -----------------" << std::endl;
-
 	compare_roots_complex<fp_t>(1, roots.size(), helperRoots, roots,
 								max_absolute_error, max_relative_error);
-	return max_absolute_error;
+
+	std::vector<fp_t> result = { max_absolute_error, max_relative_error };
+
+	return result;
 }
 
 int main(int argc, const char * argv[]) {
 
 	std::vector<long double> absoluteErrors = {};
+	std::vector<long double> relativeErrors = {};
 
 	for (int i = 0; i < 1'000'000; ++i) {
-		absoluteErrors.push_back(testPolynomial<long double>(3));
+		std::vector<long double> errors = testPolynomial<long double>(3);
+		absoluteErrors.push_back(errors[0]);
+		relativeErrors.push_back(errors[1]);
 	}
-
-// 	Experiments:
-
-//	1. max absolute error 0.598953
-//	2. max absolute error 0.598954
-//  3. max absolute error 0.598953
-//  4. max absolute error 0.59895
-//  5. max absolute error 2.46281 ??? 
-//  6. max absolute error 0.598952
-//  7. max absolute error 0.598951
-//  8. max absolute error 0.598952
-//  9. max absolute error 0.598952
-//  10. max absolute error 0.598953
 
 	std::vector<long double>::iterator it = std::max_element(std::begin(absoluteErrors), std::end(absoluteErrors));
 	std::cout << "max absolute error " << (*it) << std::endl;
 
+	std::vector<long double>::iterator it2 = std::max_element(std::begin(relativeErrors), std::end(relativeErrors));
+	std::cout << "max relative error " << (*it2) << std::endl;
+
+//	smallTest();
 	return 0;
 }
