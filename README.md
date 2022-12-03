@@ -9,18 +9,13 @@
 
 Прогнал алгоритм 10 раз по 1'000'000 примеров, получил следующие абсолютные погрешности:
 
-1. max absolute error 0.598953
-2. max absolute error 0.598954
-3. max absolute error 0.598953
-4. max absolute error 0.59895
-5. max absolute error 2.46281 ??? 
-6. max absolute error 0.598952
-7. max absolute error 0.598951
-8. max absolute error 0.598952
-9. max absolute error 0.598952
-10. max absolute error 0.598953
-
-# Далее
-
-- Из всех экспериментов выделился 5 - ый с погрешностью 2.46281. Нужно обнаружить корни, которые 'неудобны' для данного алгоритма 
-- Попытаться уменьшить величину погрешности
+1.  max absolute error 0.00175634
+2.  max absolute error 0.00177331
+3.  max absolute error 0.00181384
+4.  max absolute error 0.00175676
+5.  max absolute error 0.00179372
+6.  max absolute error 0.00175073
+7.  max absolute error 0.00178865
+8.  max absolute error 0.00177475
+9.  max absolute error 0.00178924
+10. max absolute error 0.00175864

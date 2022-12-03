@@ -75,7 +75,7 @@ std::vector<fp_t> testPolynomial(unsigned int roots_count) {
 	std::vector<fp_t> roots(roots_count), coefficients(roots_count + 1);
 	generate_polynomial<fp_t>(roots_count, 0, roots_count, 0, MAX_DISTANCE, -1, 1, roots, coefficients);
 
-	CubicPolynomialFMA <fp_t>helper(coefficients[0], coefficients[1], coefficients[2]);
+	CubicPolynomialFMA <fp_t>helper(coefficients[2], coefficients[1], coefficients[0]);
 	std::vector<std::complex<fp_t>> myRoots = helper.calculateRoots();
 
 	std::vector<fp_t> imags = { abs(myRoots[0].imag()), abs(myRoots[1].imag()), abs(myRoots[2].imag()) };
