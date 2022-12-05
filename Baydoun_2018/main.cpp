@@ -69,6 +69,58 @@ void smallTest() {
 	}
 }
 
+// Function to test cubic solution:
+// testCount - total count of tests
+// dist - maximum distance between roots
+template <typename fp_t>
+void testCubicAdv(const int testCount, const fp_t dist){
+
+	int P = 3; // power, total number of tests
+	fp_t low=-1, high=1; // [low, high], max distance between clustered roots
+	fp_t absMaxError, relMaxError; // variables for each test Errors
+	int numOfFoundRoots, cantFind = 0;
+	fp_t maxAbsAllofTest = -1, maxRelAllofTest = -1; // maximum from maxAbsoluteError and maxRelError from all [testCount] tests
+
+	long double absErrors = 0;
+	long double relError = 0;
+
+	std::vector<fp_t> coefficients(P+1);
+	std::vector<fp_t> trueRoots(P);
+	for(int i=0; i < testCount; ++i){
+		generate_polynomial<fp_t>(P, 0, P, 0, dist,
+								  low, high, trueRoots, coefficients);
+
+		CubicPolynomialFMA <fp_t>helper(coefficients[2], coefficients[1], coefficients[0]);
+		std::vector<std::complex<fp_t>> myRoots = helper.calculateRoots();
+
+		std::vector<fp_t> imags = { abs(myRoots[0].imag()), abs(myRoots[1].imag()), abs(myRoots[2].imag()) };
+		int indexOfRealRoot = std::distance(std::begin(imags), std::min_element(std::begin(imags), std::end(imags)));
+
+		std::vector<std::complex<fp_t>> helperRoots = { std::complex<fp_t>(myRoots[indexOfRealRoot].real(), 0) };
+
+		compare_roots_complex(3, P, helperRoots, trueRoots, absMaxError, relMaxError);
+
+		if(isinf(absMaxError))
+			cantFind += 1;
+		else{
+			maxAbsAllofTest = absMaxError > maxAbsAllofTest? absMaxError : maxAbsAllofTest;
+			absErrors += absMaxError;
+			maxRelAllofTest = relMaxError > maxRelAllofTest ? relMaxError : maxRelAllofTest;
+			relError += relMaxError;
+		}
+	}
+	std::cout<<"Max distance: "<< dist << std::endl;
+	std::cout<<"Total count of tests: "<<testCount<<std::endl;
+	std::cout<<"Couldn't find roots: " << cantFind <<" times "<<std::endl;
+	std::cout<< "----------------------------------------------------" << std::endl;
+	std::cout<<"Mean absMaxError = "<< absErrors / (testCount - cantFind) << std::endl;
+	std::cout<<"Max {absMaxError_i | i = 0, ..., 1e6} from all of the tests: "<<maxAbsAllofTest<< std::endl;
+	std::cout<< "----------------------------------------------------" << std::endl;
+	std::cout<<"Mean RelMaxError = "<< relError / (testCount - cantFind) << std::endl;
+	std::cout<<"Max {RelMaxError_i | i = 0, ..., 1e6} all of the tests: "<<maxRelAllofTest << std::endl;
+	std::cout<< "----------------------------------------------------" << std::endl;
+}
+
 template<typename fp_t>
 std::vector<fp_t> testPolynomial(unsigned int roots_count) {
 	fp_t max_absolute_error, max_relative_error;
@@ -93,21 +145,22 @@ std::vector<fp_t> testPolynomial(unsigned int roots_count) {
 
 int main(int argc, const char * argv[]) {
 
-	std::vector<long double> absoluteErrors = {};
-	std::vector<long double> relativeErrors = {};
-
-	for (int i = 0; i < 1'000'000; ++i) {
-		std::vector<long double> errors = testPolynomial<long double>(3);
-		absoluteErrors.push_back(errors[0]);
-		relativeErrors.push_back(errors[1]);
-	}
-
-	std::vector<long double>::iterator it = std::max_element(std::begin(absoluteErrors), std::end(absoluteErrors));
-	std::cout << "max absolute error " << (*it) << std::endl;
-
-	std::vector<long double>::iterator it2 = std::max_element(std::begin(relativeErrors), std::end(relativeErrors));
-	std::cout << "max relative error " << (*it2) << std::endl;
+//	std::vector<long double> absoluteErrors = {};
+//	std::vector<long double> relativeErrors = {};
+//
+//	for (int i = 0; i < 1'000'000; ++i) {
+//		std::vector<long double> errors = testPolynomial<long double>(3);
+//		absoluteErrors.push_back(errors[0]);
+//		relativeErrors.push_back(errors[1]);
+//	}
+//
+//	std::vector<long double>::iterator it = std::max_element(std::begin(absoluteErrors), std::end(absoluteErrors));
+//	std::cout << "max absolute error " << (*it) << std::endl;
+//
+//	std::vector<long double>::iterator it2 = std::max_element(std::begin(relativeErrors), std::end(relativeErrors));
+//	std::cout << "max relative error " << (*it2) << std::endl;
 
 //	smallTest();
+	testCubicAdv(1'000'000, MAX_DISTANCE);
 	return 0;
 }
