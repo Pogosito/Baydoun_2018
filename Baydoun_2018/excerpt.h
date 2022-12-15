@@ -20,6 +20,17 @@
 #include <iomanip>
 #include <complex>
 
+template<typename fp_t>
+int compare_roots2(
+		unsigned N_roots_to_check, // number of roots in (roots_to_check)
+		unsigned N_roots_ground_truth,  // number of roots in (roots_ground_truth)
+		std::vector<fp_t> &roots_to_check, // one should take into account only first (N_roots_to_check) roots here
+		std::vector<fp_t> &roots_ground_truth, // one should take into account only first (N_roots_ground_truth) roots here
+		fp_t &max_absolute_error, // here the greatest among the smallest deviations of the roots in (roots_to_check) and (roots_ground_truth)
+		// will be placed
+		// here the greatest relative error among all the roots found will be placed
+		fp_t &max_relative_error);
+
 // checks attainable number of real roots in a polynomial: a*x^4 + b*x^3 + c*x^2 + d*x + e; multiple root is treated as separate roots
 template<typename fp_t>
 int number_of_roots(unsigned P, // polynomial degree

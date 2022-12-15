@@ -5,23 +5,24 @@
 //  Created by Pogos Anesyan on 27.10.2022.
 //
 
-#ifndef ComplexCubicPolynomial_hpp
-#define ComplexCubicPolynomial_hpp
+#ifndef CubicPolynomial_hpp
+#define CubicPolynomial_hpp
 
 #include <stdio.h>
 #include <complex>
 
+template<class f_pt>
 class CubicPolynomial final {
 
 // MARK: - Public
 
 public:
 
-	CubicPolynomial(std::complex<long double> b,
-					std::complex<long double> c,
-					std::complex<long double> d);
+	CubicPolynomial(std::complex<f_pt> b,
+					std::complex<f_pt> c,
+					std::complex<f_pt> d);
 
-	std::vector<std::complex<long double>> calculateRoots();
+	std::vector<std::complex<f_pt>> calculateRoots();
 
 // MARK: - Private
 
@@ -29,74 +30,75 @@ private:
 
 	// MARK: - Coefficients
 
-	void calculeteAllCoiffecents(std::complex<long double> b,
-								 std::complex<long double> c,
-								 std::complex<long double> d);
+	void calculeteAllCoiffecents(std::complex<f_pt> b,
+								 std::complex<f_pt> c,
+								 std::complex<f_pt> d);
 
 	// B
-	std::complex<long double> b;
-	std::complex<long double> squareOfB;
-	std::complex<long double> cubeOfB;
-	std::complex<long double> fourthDegreeOfB;
+	std::complex<f_pt> b;
+	std::complex<f_pt> squareOfB;
+	std::complex<f_pt> cubeOfB;
+	std::complex<f_pt> fourthDegreeOfB;
 
 	// C
-	std::complex<long double> c;
-	std::complex<long double> squareOfC;
-	std::complex<long double> cubeOfC;
+	std::complex<f_pt> c;
+	std::complex<f_pt> squareOfC;
+	std::complex<f_pt> cubeOfC;
 
 	// D
-	std::complex<long double> d;
-	std::complex<long double> squareOfD;
-	std::complex<long double> cubeOfD;
+	std::complex<f_pt> d;
+	std::complex<f_pt> squareOfD;
+	std::complex<f_pt> cubeOfD;
 
 	// Helpers
-	std::complex<long double> multiplicationsOfBAndC;
-	std::complex<long double> multiplicationsOfSquaresBAndC;
+	std::complex<f_pt> multiplicationsOfBAndC;
+	std::complex<f_pt> multiplicationsOfSquaresBAndC;
 
-	std::complex<long double> sqrtOfDelta0;
-	std::complex<long double> d_0;
-	std::complex<long double> coefficient;
-	std::complex<long double> smallDeltaL;
-	std::complex<long double> A1;
-	std::complex<long double> A2;
-	std::complex<long double> R1;
-	std::complex<long double> R2;
-	std::complex<long double> alphaCoefficient;
-	std::complex<long double> alpha1;
-	std::complex<long double> alpha2;
+	std::complex<f_pt> sqrtOfDelta0;
+	std::complex<f_pt> d_0;
+	std::complex<f_pt> coefficient;
+	std::complex<f_pt> smallDeltaL;
+	std::complex<f_pt> A1;
+	std::complex<f_pt> A2;
+	std::complex<f_pt> R1;
+	std::complex<f_pt> R2;
+	std::complex<f_pt> alphaCoefficient;
+	std::complex<f_pt> alpha1;
+	std::complex<f_pt> alpha2;
 
 	// MARK: - Definition 3.1
 
 	// ∆o
-	std::complex<long double> calculateDelta0();
+	std::complex<f_pt> calculateDelta0();
 
 	// d_0
-	std::complex<long double> calculateD0();
+	std::complex<f_pt> calculateD0();
 
 	// ∆l
-	std::complex<long double> calculateDeltaL();
+	std::complex<f_pt> calculateDeltaL();
 
 	// MARK: - Definition 3.2
 
 	// δl
-	std::complex<long double> calculateSmallDeltaL();
+	std::complex<f_pt> calculateSmallDeltaL();
 
 	// A1
-	std::complex<long double> calculateA1();
+	std::complex<f_pt> calculateA1();
 
 	// A2
-	std::complex<long double> calculateA2();
+	std::complex<f_pt> calculateA2();
 
 	// MARK: - Theorem 3.3
 
 	// R1 && R2
-	std::complex<long double> calculateR(bool isR1);
+	std::complex<f_pt> calculateR(bool isR1);
 
 	// α1
-	std::complex<long double> calculateAlpha1();
+	std::complex<f_pt> calculateAlpha1();
 
 	// α2
-	std::complex<long double> calculateAlpha2();
+	std::complex<f_pt> calculateAlpha2();
 };
 
-#endif /* ComplexCubicPolynomial_hpp */
+#include "CubicPolynomial.tpp"
+#endif

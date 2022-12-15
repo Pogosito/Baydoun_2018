@@ -7,6 +7,31 @@ unsigned long long N_additive_feedback_fired = 0ULL;
 unsigned long long N_multiplicative_feedback_fired = 0ULL;
 
 
+template<typename fp_t>
+int compare_roots2(
+unsigned N_roots_to_check, // number of roots in (roots_to_check)
+unsigned N_roots_ground_truth,  // number of roots in (roots_ground_truth)
+std::vector<fp_t> &roots_to_check, // one should take into account only first (N_roots_to_check) roots here
+std::vector<fp_t> &roots_ground_truth, // one should take into account only first (N_roots_ground_truth) roots here
+fp_t &max_absolute_error, // here the greatest among the smallest deviations of the roots in (roots_to_check) and (roots_ground_truth)
+// will be placed
+fp_t &max_relative_error){
+	long double abs = std::numeric_limits<long double >::max();
+	long double  rel = std::numeric_limits<long double >::max();
+	auto size = N_roots_to_check;
+	for(int j = 0; j < size; j++)
+	for(int i = 0; i < size; i++){
+		long double  absLoc = std::abs((long double)(roots_ground_truth[i])-(long double)(roots_to_check[(i + j) % size]));
+		abs = std::min(absLoc,abs);
+		rel = std::min(std::abs(
+				(long double)(absLoc + std::numeric_limits<fp_t>::epsilon())/
+						(long double)(std::max(roots_to_check[(i + j) % size],roots_ground_truth[i]) + std::numeric_limits<fp_t>::epsilon())),rel);
+	}
+	max_absolute_error = abs;
+	max_relative_error = rel;
+	return (N_roots_to_check<N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_LOST : ((N_roots_to_check>N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_IS_FAKE : PR_NUMBERS_OF_ROOTS_EQUAL);
+}
+
 /* computes (a*b - c*d) with precision not worse than 1.5*(unit of the least precision) suggested in Claude-Pierre Jeannerod,
 Nicolas Louvet, and Jean-Michel Muller, "Further Analysis of Kahan's Algorithm for the Accurate Computation of 2x2 Determinants".
 Mathematics of Computation, Vol. 82, No. 284, Oct. 2013, pp. 2245-2264 */
@@ -298,7 +323,11 @@ int compare_roots(
                     deviation < deviation_min_for_this_root ? i_closest_root = i, j_closest_root = j, deviation
                                                             : deviation_min_for_this_root;
         }
-        assert(i_closest_root != -1 and j_closest_root != -1);
+		if (i_closest_root == -1 or j_closest_root == -1) {
+				std::out_of_range("closest root not found");
+			return -1;
+		}
+//        assert(i_closest_root != -1 and j_closest_root != -1);
         auto relative_error_for_this_root = static_cast<fp_t>(2.0L) * deviation_min_for_this_root /
                                             (std::abs(roots_ground_truth[i_closest_root]) +
                                              std::abs(roots_to_check[j_closest_root]));
