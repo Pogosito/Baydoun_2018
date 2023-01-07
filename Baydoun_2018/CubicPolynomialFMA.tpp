@@ -106,7 +106,7 @@ template<typename f_pt>
 f_pt CubicPolynomialFMA<f_pt>::calculateDeltaL() {
 
 	const f_pt _165dCubeOfB = std::fma(static_cast<f_pt>(16.5L), d, cubeOfb);
-	const f_pt _36dCubeOfC = std::fma(static_cast<f_pt>(36.0L), d, cubeOfC);
+	const f_pt _36dCubeOfC = std::fma(static_cast<f_pt>(36.0L), squareOfD, cubeOfC);
 
 	const f_pt helper1 = std::fma(static_cast<f_pt>(8.0L) * cubeOfb, _165dCubeOfB, _36dCubeOfC);
 
@@ -120,9 +120,9 @@ f_pt CubicPolynomialFMA<f_pt>::calculateDeltaL() {
 
 	const f_pt helper3 = pr_product_difference(squareOfC, helper1, static_cast<f_pt>(-3.0L) * b, helper2);
 
-	const f_pt biquadrateOfBc_6squareOfD = std::fma(biquadrateOfB, c, static_cast<f_pt>(-6.0L) * squareOfD);
-	const f_pt helper4 = std::fma(static_cast<f_pt>(12.0L) * c, biquadrateOfBc_6squareOfD, -squareOfb * squareOfD);
-	const f_pt helper5 = std::fma(static_cast<f_pt>(97.0L) * squareOfb, squareOfC, static_cast<f_pt>(-9.0L) * squareOfD);
+	const f_pt biquadrateOfBc_6squareOfD = pr_product_difference(biquadrateOfB, c, static_cast<f_pt>(6.0L), squareOfD);
+	const f_pt helper4 = std::fma(static_cast<f_pt>(12.0L) * c, biquadrateOfBc_6squareOfD, squareOfb * squareOfD);
+	const f_pt helper5 = std::fma(static_cast<f_pt>(97.0L) * squareOfb, squareOfC, static_cast<f_pt>(9.0L) * squareOfD);
 
 	const f_pt helper6 = pr_product_difference(static_cast<f_pt>(2.0L) * b, helper4, static_cast<f_pt>(-3.0L) * d, helper5);
 
