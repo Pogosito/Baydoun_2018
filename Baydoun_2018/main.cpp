@@ -98,6 +98,6 @@ void testCubicAdv(const int testCount, const fp_t dist){
 }
 
 int main(int argc, const char * argv[]) {
-	testCubicAdv<long double>(1000'000, 1e-5);
+	testCubicAdv<float>(1'000'000, 1e-5);
 	return 0;
 }

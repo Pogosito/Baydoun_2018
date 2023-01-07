@@ -26,7 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0466E6E0294B5FC800ABDFDF /* CubicPolynomialFMA.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = CubicPolynomialFMA.tpp; sourceTree = "<group>"; };
+		0466E6E0294B5FC800ABDFDF /* CubicPolynomialFMA.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = CubicPolynomialFMA.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		0466E6E1294B5FC900ABDFDF /* CubicPolynomialFMA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubicPolynomialFMA.hpp; sourceTree = "<group>"; };
 		0466E6E3294B775600ABDFDF /* excerpt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = excerpt.h; sourceTree = "<group>"; };
 		0466E6E4294B775600ABDFDF /* excerpt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = excerpt.cpp; sourceTree = "<group>"; };
