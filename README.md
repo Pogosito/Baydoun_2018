@@ -16,8 +16,8 @@
 - Mean_Abs: 0.000693906 
 - Max_Abs: 0.0374629 
 
-- Mean_Rel: 0.0014141 
-- Max_Rel: 0.185286 
+- Mean_Rel: 0.00141923
+- Max_Rel: 0.12399 
 
 ## double
 
