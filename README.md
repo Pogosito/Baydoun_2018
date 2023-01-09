@@ -13,16 +13,16 @@
 
 ## float
 
-- Mean_Abs: 0.000693906 
-- Max_Abs: 0.0374629 
+- Mean_Abs: 0.000639764
+- Max_Abs: 0.00597447
 
-- Mean_Rel: 0.00141923
-- Max_Rel: 0.12399 
+- Mean_Rel: 0.00129971
+- Max_Rel: 0.122916
 
 ## double
 
-- Mean_Abs: 5.13373e-06 
-- Max_Abs: 1.66363e-05 
+- Mean_Abs: 5.10327e-06
+- Max_Abs: 1.66188e-05
  
-- Mean_Rel: 2.5515e-05 
-- Max_Rel: 0.00941666 
+- Mean_Rel: 2.50153e-05
+- Max_Rel: 0.00784707

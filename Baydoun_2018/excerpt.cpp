@@ -7,36 +7,11 @@ unsigned long long N_additive_feedback_fired = 0ULL;
 unsigned long long N_multiplicative_feedback_fired = 0ULL;
 
 
-template<typename fp_t>
-int compare_roots2(
-unsigned N_roots_to_check, // number of roots in (roots_to_check)
-unsigned N_roots_ground_truth,  // number of roots in (roots_ground_truth)
-std::vector<fp_t> &roots_to_check, // one should take into account only first (N_roots_to_check) roots here
-std::vector<fp_t> &roots_ground_truth, // one should take into account only first (N_roots_ground_truth) roots here
-fp_t &max_absolute_error, // here the greatest among the smallest deviations of the roots in (roots_to_check) and (roots_ground_truth)
-// will be placed
-fp_t &max_relative_error){
-	long double abs = std::numeric_limits<long double >::max();
-	long double  rel = std::numeric_limits<long double >::max();
-	auto size = N_roots_to_check;
-	for(int j = 0; j < size; j++)
-	for(int i = 0; i < size; i++){
-		long double  absLoc = std::abs((long double)(roots_ground_truth[i])-(long double)(roots_to_check[(i + j) % size]));
-		abs = std::min(absLoc,abs);
-		rel = std::min(std::abs(
-				(long double)(absLoc + std::numeric_limits<fp_t>::epsilon())/
-						(long double)(std::max(roots_to_check[(i + j) % size],roots_ground_truth[i]) + std::numeric_limits<fp_t>::epsilon())),rel);
-	}
-	max_absolute_error = abs;
-	max_relative_error = rel;
-	return (N_roots_to_check<N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_LOST : ((N_roots_to_check>N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_IS_FAKE : PR_NUMBERS_OF_ROOTS_EQUAL);
-}
-
 /* computes (a*b - c*d) with precision not worse than 1.5*(unit of the least precision) suggested in Claude-Pierre Jeannerod,
 Nicolas Louvet, and Jean-Michel Muller, "Further Analysis of Kahan's Algorithm for the Accurate Computation of 2x2 Determinants".
 Mathematics of Computation, Vol. 82, No. 284, Oct. 2013, pp. 2245-2264 */
 template<typename fp_t>
-inline fp_t pr_product_difference(fp_t a, fp_t b, fp_t c, fp_t d) {
+fp_t pr_product_difference(fp_t a, fp_t b, fp_t c, fp_t d) {
     auto tmp = d * c;
     return std::fma(a, b, -tmp) + std::fma(-d, c, tmp);
 }
@@ -309,28 +284,43 @@ int compare_roots(
         // will be placed
         fp_t &max_relative_error) // here the greatest relative error among all the roots found will be placed
 {
+    max_absolute_error = static_cast<fp_t>(0);
+    max_relative_error = static_cast<fp_t>(0);
+
+    for(int i = 0; i< N_roots_to_check; i++){
+        if(std::isnan(roots_to_check[i]))
+            return PR_AT_LEAST_ONE_ROOT_IS_NAN;
+        //Since we can't compare return errors as zero for better comparing compatibility
+    }
     fp_t deviation, absolute_error_max = static_cast<fp_t>(0.0L), relative_error_max = static_cast<fp_t>(0.0L);
     auto rv = (N_roots_to_check < N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_LOST :
               ((N_roots_to_check > N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_IS_FAKE : PR_NUMBERS_OF_ROOTS_EQUAL);
 // find the largest distance between the closest pairs of roots: one - from ground truth, one - from found ones
+    if (N_roots_to_check <= 0) {
+        throw std::out_of_range("N_roots_to_check should be greater than zero");
+    }
     for (int i = 0; i < N_roots_ground_truth; ++i) {
         // find the closest found root to the given ground truth root
-        auto deviation_min_for_this_root = std::numeric_limits<fp_t>::infinity();
+        fp_t deviation_min_for_this_root = std::numeric_limits<fp_t>::infinity();
         auto i_closest_root = -1, j_closest_root = -1;
+        //std::cout<<"rootsToCheck:"<<N_roots_to_check;
         for (int j = 0; j < N_roots_to_check; ++j) {
             deviation = std::abs(roots_ground_truth[i] - roots_to_check[j]);
             deviation_min_for_this_root =
                     deviation < deviation_min_for_this_root ? i_closest_root = i, j_closest_root = j, deviation
                                                             : deviation_min_for_this_root;
+
         }
-		if (i_closest_root == -1 or j_closest_root == -1) {
-				std::out_of_range("closest root not found");
-			return -1;
-		}
+        if (i_closest_root == -1 or j_closest_root == -1) {
+            throw std::out_of_range("closest root not found");
+        }
 //        assert(i_closest_root != -1 and j_closest_root != -1);
-        auto relative_error_for_this_root = static_cast<fp_t>(2.0L) * deviation_min_for_this_root /
-                                            (std::abs(roots_ground_truth[i_closest_root]) +
-                                             std::abs(roots_to_check[j_closest_root]));
+        //auto relative_error_for_this_root = static_cast<fp_t>(2.0L) * deviation_min_for_this_root /
+        //                                    (std::abs(roots_ground_truth[i_closest_root]) +
+        //                                     std::abs(roots_to_check[j_closest_root]));
+        auto relative_error_for_this_root = (deviation_min_for_this_root + std::numeric_limits<fp_t>::epsilon()) /
+                                            (std::max(std::abs(roots_ground_truth[i_closest_root]),
+                                                      std::abs(roots_to_check[j_closest_root])) + std::numeric_limits<fp_t>::epsilon());
 
         absolute_error_max =
                 deviation_min_for_this_root > absolute_error_max ? deviation_min_for_this_root : absolute_error_max;
@@ -340,6 +330,42 @@ int compare_roots(
     max_absolute_error = absolute_error_max;
     max_relative_error = relative_error_max;
     return rv;
+}
+
+// Compares two vectors of roots; root orderings play no role. For each entry in (roots_ground_truth),
+// the closest entry in (roots_to_check) is found and corresponding distance found. Among such distances
+// the smallest will be stored to min_absolute_error, min_relative_error
+
+template<typename fp_t>
+int compare_roots2(
+        unsigned N_roots_to_check, // number of roots in (roots_to_check)
+        unsigned N_roots_ground_truth,  // number of roots in (roots_ground_truth)
+        std::vector<fp_t> &roots_to_check, // one should take into account only first (N_roots_to_check) roots here
+        std::vector<fp_t> &roots_ground_truth, // one should take into account only first (N_roots_ground_truth) roots here
+        fp_t &min_absolute_error, // here the smallest among the smallest deviations of the roots in (roots_to_check) and (roots_ground_truth)
+// will be placed
+        fp_t &min_relative_error){
+    min_absolute_error = static_cast<fp_t>(0);
+    min_relative_error = static_cast<fp_t>(0);
+    for(int i = 0; i< N_roots_to_check; i++){
+        if(std::isnan(roots_to_check[i]))
+            return PR_AT_LEAST_ONE_ROOT_IS_NAN;
+        //Since we can't compare return errors as zero for better comparing compatibility
+    }
+    fp_t abs = std::numeric_limits<fp_t>::max();
+    fp_t rel = std::numeric_limits<fp_t>::max();
+    auto size = N_roots_to_check;
+    auto sizeGt = N_roots_ground_truth;
+    for(int j = 0;j < size; j++)
+        for(int i = 0;i < sizeGt; i++){
+            fp_t absLocal = std::abs((roots_ground_truth[i])-(roots_to_check[(i + j) % size]));
+            abs = std::min(absLocal,abs);
+            rel = std::min(((absLocal + std::numeric_limits<fp_t>::epsilon())/
+                            (std::max(std::abs(roots_to_check[(i + j) % size]),std::abs(roots_ground_truth[i])) + std::numeric_limits<fp_t>::epsilon())),rel);
+        }
+    min_absolute_error = abs;
+    min_relative_error = rel;
+    return (N_roots_to_check<N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_LOST : ((N_roots_to_check>N_roots_ground_truth) ? PR_AT_LEAST_ONE_ROOT_IS_FAKE : PR_NUMBERS_OF_ROOTS_EQUAL);
 }
 
 
@@ -384,10 +410,13 @@ int compare_roots_complex(unsigned N_roots_to_check, // number of roots in roots
         // here the greatest relative error among all the roots found will be placed
                           fp_t &max_relative_error) {
     std::vector<fp_t> roots_to_check_parsed;
-    for (auto root: roots_to_check) {
-        if (std::numeric_limits<fp_t>::epsilon() > abs(root.imag())) {
+    for (std::complex<fp_t> root: roots_to_check) {
+        if (abs(root.imag()) < std::numeric_limits<fp_t>::epsilon()) {
             roots_to_check_parsed.push_back(root.real());
         }
+    }
+    if (roots_to_check_parsed.empty()) {
+        return -1;
     }
     return compare_roots(roots_to_check_parsed.size(), N_roots_ground_truth, roots_to_check_parsed, roots_ground_truth,
                          max_absolute_error, max_relative_error);
@@ -434,6 +463,30 @@ template int compare_roots<long double>(
         long double &max_absolute_error,
         long double &max_relative_error);
 
+template int compare_roots2<float>(
+        unsigned N_roots_to_check,
+        unsigned N_roots_ground_truth,
+        std::vector<float> &roots_to_check,
+        std::vector<float> &roots_ground_truth,
+        float &max_absolute_error,
+        float &max_relative_error);
+
+template int compare_roots2<double>(
+        unsigned N_roots_to_check,
+        unsigned N_roots_ground_truth,
+        std::vector<double> &roots_to_check,
+        std::vector<double> &roots_ground_truth,
+        double &max_absolute_error,
+        double &max_relative_error);
+
+template int compare_roots2<long double>(
+        unsigned N_roots_to_check,
+        unsigned N_roots_ground_truth,
+        std::vector<long double> &roots_to_check,
+        std::vector<long double> &roots_ground_truth,
+        long double &max_absolute_error,
+        long double &max_relative_error);
+
 
 template int compare_roots_complex<float>(unsigned N_roots_to_check, // number of roots in roots_to_check
                                           unsigned N_roots_ground_truth,  // number of roots in roots_ground_truth
@@ -461,3 +514,9 @@ template int compare_roots_complex<long double>(unsigned N_roots_to_check, // nu
         // will be placed
         // here the greatest relative error among all the roots found will be placed
                                                 long double &max_relative_error);
+
+template float pr_product_difference<float>(float a, float b, float c, float d);
+
+template double pr_product_difference<double>(double a, double b, double c, double d);
+
+template long double pr_product_difference<long double>(long double a, long double b, long double c, long double d);

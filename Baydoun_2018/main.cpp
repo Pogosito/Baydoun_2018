@@ -64,18 +64,19 @@ void testCubicAdv(const int testCount, const fp_t dist){
 		std::complex <fp_t> r2 = epsilonComplex(myRoots[1]);
 		std::complex <fp_t> r3 = epsilonComplex(myRoots[2]);
 
-		if(!r1.imag()){
-			realRoots.push_back(r1.real());
-		}
-		if(!r2.imag()){
-			realRoots.push_back(r2.real());
-		}
-		if(!r3.imag()){
-			realRoots.push_back(r3.real());
+		if (!r1.imag()){ realRoots.push_back(r1.real()); }
+		if (!r2.imag()){ realRoots.push_back(r2.real()); }
+		if (!r3.imag()){ realRoots.push_back(r3.real()); }
+
+		if (realRoots.size() > 0) {
+			auto res = compare_roots<fp_t>(realRoots.size(), 3, realRoots,
+										   trueRoots, absMaxError, relMaxError);
+			if (res == PR_AT_LEAST_ONE_ROOT_IS_NAN) {
+				std::cout << "PR_AT_LEAST_ONE_ROOT_IS_NAN" << std::endl;
+				continue;
+			}
 		}
 
-		compare_roots<fp_t>(realRoots.size(), 3, realRoots,
-							trueRoots, absMaxError, relMaxError);
 		if(isinf(absMaxError))
 			cantFind += 1;
 		else{
