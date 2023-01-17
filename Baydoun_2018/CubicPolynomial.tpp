@@ -32,7 +32,7 @@ void CubicPolynomial<f_pt>::calculeteAllCoiffecents(std::complex<f_pt> b,
 	cubeOfC = squareOfC * c;
 
 	squareOfD = d * d;
-	cubeOfD = pow(b, 3);
+	cubeOfD = pow(d, 3);
 
 	multiplicationsOfBAndC = b * c;
 	multiplicationsOfSquaresBAndC = squareOfB * squareOfC;
@@ -189,7 +189,7 @@ std::complex<f_pt> CubicPolynomial<f_pt>::calculateR(bool isR1) {
 	? pow(firstMember + helper, static_cast<f_pt>(1.0L) / static_cast<f_pt>(3.0L))
 	: pow(firstMember - helper, static_cast<f_pt>(1.0L) / static_cast<f_pt>(3.0L));
 
-	std::string r = isR1 ? "R1 = " : "R2 = ";
+//	std::string r = isR1 ? "R1 = " : "R2 = ";
 //	std::cout << r << result << std::endl;
 	return result;
 }

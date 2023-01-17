@@ -16,5 +16,11 @@ std::complex<f_pt> multiplyComplexNumbersFMA(std::complex<f_pt> a, std::complex<
 template<typename fp_t>
 inline fp_t pr_product_difference(fp_t a, fp_t b, fp_t c, fp_t d);
 
+template<typename fp_t>
+std::complex<fp_t> cfma(std::complex<fp_t> a, std::complex<fp_t> b, std::complex<fp_t> c);
+
+template<typename fp_t>
+inline std::complex<fp_t> complex_pr_product_difference(std::complex<fp_t> a, std::complex<fp_t> b, std::complex<fp_t> c, std::complex<fp_t> d);
+
 #include "Global.tpp"
 #endif /* Global_hpp */
