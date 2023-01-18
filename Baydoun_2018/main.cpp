@@ -54,11 +54,13 @@ void smallTest() {
 	
 	std::vector<std::vector<long double>> coefficients = {
 		{-0.0160999, 0.19128, -0.757523},
+		{-0.535955, 0.0957494, -0.00570194},
 		{-0.694404, 0.160732, -0.0124015},
-		{ 2.33799,  1.82207, 0.473331 },
+		{ 2.33799,  1.82207, 0.473331},
 		{1.92424 , 1.23423, 0.263884},
+		{1.00391, 0.335945, 0.0374732}
 	};
-	
+
 	for (int i = 0; i < coefficients.size(); ++i) {
 		std::cout << std::endl;
 		std::cout << " -----------------" << std::endl;
@@ -71,21 +73,21 @@ void smallTest() {
 		
 		CubicPolynomial complexPolynom = CubicPolynomial(complexnumber, complexnumber2, complexnumber3);
 	
-//		std::vector<std::complex<long double>> arr = complexPolynom.calculateRoots();
-//		for (int i = 0; i < arr.size(); ++i) {
-//			std::cout << "root " << arr[i] << std::endl;
-//		}
-//
-//		std::cout << " -----------------" << std::endl;
+		std::vector<std::complex<long double>> arr = complexPolynom.calculateRoots();
+		for (int i = 0; i < arr.size(); ++i) {
+			std::cout << "root " << arr[i] << std::endl;
+		}
+
+		std::cout << " -----------------" << std::endl;
 		
 		CubicPolynomialFMA <long double>helper(coefficients[i][0], coefficients[i][1], coefficients[i][2]);
 		
-//		std::vector<std::complex<long double>> arrFMA = helper.calculateRoots();
-//		for (int i = 0; i < arrFMA.size(); ++i) {
-//			std::cout << "root fma " << arrFMA[i] << std::endl;
-//		}
-//
-//		std::cout << " -----------------" << std::endl;
+		std::vector<std::complex<long double>> arrFMA = helper.calculateRoots();
+		for (int i = 0; i < arrFMA.size(); ++i) {
+			std::cout << "root fma " << arrFMA[i] << std::endl;
+		}
+
+		std::cout << " -----------------" << std::endl;
 	}
 }
 
