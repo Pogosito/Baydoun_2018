@@ -13,17 +13,5 @@
 
 ## float
 
-- Mean_Abs: 0.000102649
-- Max_Abs: 0.00597447
-
-- Mean_Rel: 0.00129971
-- Max_Rel: 0.117943
-
-## double
-
-- Mean_Abs: 4.1e-06
-- Max_Abs: 1.66179e-05
- 
-- Mean_Rel: 1.96998e-05
-- Max_Rel: 0.00384161
-
+- max_absolute_error: 0.00014311075211
+- max_relative_error: 0.09583940357

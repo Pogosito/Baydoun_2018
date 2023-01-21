@@ -6,6 +6,7 @@
 //
 
 #include "Global.hpp"
+#include <numbers>
 
 template<typename fp_t>
 std::complex<fp_t> multiplyComplexNumbersFMA(std::complex<fp_t> a, std::complex<fp_t> b) {
@@ -47,4 +48,17 @@ std::complex<fp_t> cfma(std::complex<fp_t> a, std::complex<fp_t> b, std::complex
 
 	std::complex<fp_t> num(p1, p2);
 	return num;
+}
+
+template<typename fp_t>
+fp_t argp(std::complex<fp_t> inp) {
+	const long double _PI = std::numbers::pi_v<long double>;
+	fp_t x = std::real(inp);
+	fp_t y = std::imag(inp);
+	if (x > 0)
+		return std::atan2(y, x);
+	else{
+		fp_t _pi = y < 0 ? -_PI : _PI;
+		return x == 0 ? _pi / static_cast<fp_t>(2) : std::atan2(y, x) + _pi;
+	}
 }

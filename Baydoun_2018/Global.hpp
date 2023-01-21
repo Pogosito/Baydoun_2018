@@ -22,5 +22,8 @@ std::complex<fp_t> cfma(std::complex<fp_t> a, std::complex<fp_t> b, std::complex
 template<typename fp_t>
 inline std::complex<fp_t> complex_pr_product_difference(std::complex<fp_t> a, std::complex<fp_t> b, std::complex<fp_t> c, std::complex<fp_t> d);
 
+template<typename fp_t>
+fp_t argp(std::complex<fp_t> inp);
+
 #include "Global.tpp"
 #endif /* Global_hpp */

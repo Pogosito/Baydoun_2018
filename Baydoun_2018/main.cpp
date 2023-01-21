@@ -10,6 +10,7 @@
 #include "CubicPolynomialFMA.hpp"
 #include "CubicPolynomial.hpp"
 #include "excerpt.h"
+#include <limits>
 #define MAX_DISTANCE 1e-5
 
 using namespace  std;
@@ -57,8 +58,8 @@ void smallTest() {
 		{-0.535955, 0.0957494, -0.00570194},
 		{-0.694404, 0.160732, -0.0124015},
 		{ 2.33799,  1.82207, 0.473331},
-		{1.92424 , 1.23423, 0.263884},
-		{1.00391, 0.335945, 0.0374732}
+		{ 1.92424 , 1.23423, 0.263884},
+		{ 1.00391, 0.335945, 0.0374732}
 	};
 
 	for (int i = 0; i < coefficients.size(); ++i) {
@@ -91,80 +92,55 @@ void smallTest() {
 	}
 }
 
-// Flexible suppression imaginary part of complex number
 template<typename fp_t>
-inline complex<fp_t> epsilonComplex(const complex<fp_t> &x)
-{
-	return abs(x) * numeric_limits<fp_t>::epsilon() > abs(x.imag()) ? complex<fp_t>(x.real(), 0) : x;
-}
+auto testPolynomial(unsigned int roots_count) {
+	fp_t max_absolute_error;
+	fp_t max_relative_error;
 
-// Function to test cubic solution:
-// testCount - total count of tests
-// dist - maximum distance between roots
-template <typename fp_t>
-void testCubicAdv(const int testCount, const fp_t dist){
+	vector<fp_t> roots(roots_count), coefficients(roots_count + 1);
 
-	int P = 3; // power, total number of tests
-	fp_t low=-1, high=1; // [low, high], max distance between clustered roots
-	fp_t absMaxError, relMaxError; // variables for each test Errors
-	int cantFind = 0;
-	fp_t maxAbsAllofTest = -1, maxRelAllofTest = -1; // maximum from maxAbsoluteError and maxRelError from all [testCount] tests
+	generate_polynomial<fp_t>(roots_count, 0, roots_count, 0, 1e-5, -1, 1, roots, coefficients);
 
-	long double absErrors = 0;
-	long double relError = 0;
+	vector<complex<fp_t>> roots_computed = CubicPolynomialFMA<fp_t>(coefficients[2], coefficients[1], coefficients[0]).calculateRoots();
 
-	std::vector<fp_t> coefficients(P+1);
-	std::vector<fp_t> trueRoots(P);
+	auto result = compare_roots_complex<fp_t>(roots_computed.size(), roots.size(), roots_computed, roots, max_absolute_error, max_relative_error);
 
+	if (abs(max_relative_error) > 1)
+		cout << "Error rel = " << max_relative_error << " for coef " << endl << coefficients[0] <<
+		endl << coefficients[1] << endl << coefficients[2] << endl << coefficients[3] << endl << coefficients[4];
 
-	for(int i=0; i < testCount; ++i){
-		std::vector<fp_t> realRoots;
-
-		generate_polynomial<fp_t>(P, 0, P, 0, dist,
-								  low, high, trueRoots, coefficients);
-
-		CubicPolynomialFMA <fp_t>helper(coefficients[2], coefficients[1], coefficients[0]);
-		std::vector<std::complex<fp_t>> myRoots = helper.calculateRoots();
-
-		std::complex <fp_t> r1 = epsilonComplex(myRoots[0]);
-		std::complex <fp_t> r2 = epsilonComplex(myRoots[1]);
-		std::complex <fp_t> r3 = epsilonComplex(myRoots[2]);
-
-		if (!r1.imag()) { realRoots.push_back(r1.real()); }
-		if (!r2.imag()) { realRoots.push_back(r2.real()); }
-		if (!r3.imag()) { realRoots.push_back(r3.real()); }
-
-		if (realRoots.size() > 0) {
-			auto res = compare_roots<fp_t>(realRoots.size(), 3, realRoots,
-										   trueRoots, absMaxError, relMaxError);
-			if (res == PR_AT_LEAST_ONE_ROOT_IS_NAN) {
-				std::cout << "PR_AT_LEAST_ONE_ROOT_IS_NAN" << std::endl;
-				continue;
-			}
-		}
-
-		if(isinf(absMaxError))
-			cantFind += 1;
-		else{
-			maxAbsAllofTest = absMaxError > maxAbsAllofTest? absMaxError : maxAbsAllofTest;
-			absErrors += absMaxError;
-			maxRelAllofTest = relMaxError > maxRelAllofTest ? relMaxError : maxRelAllofTest;
-			relError += relMaxError;
-		}
-	}
-	std::cout<<"Max distance: "<< dist << std::endl;
-	std::cout<<"Total count of tests: "<<testCount<<std::endl;
-	std::cout<<"Couldn't find roots: " << cantFind <<" times "<<std::endl;
-	std::cout<< "----------------------------------------------------" << std::endl;
-	std::cout<<"Mean absMaxError = "<< absErrors / (testCount - cantFind) << std::endl;
-	std::cout<<"Max {absMaxError_i | i = 0, ..., 1e6} from all of the tests: "<<maxAbsAllofTest<< std::endl;
-	std::cout<< "----------------------------------------------------" << std::endl;
-	std::cout<<"Mean RelMaxError = "<< relError / (testCount - cantFind) << std::endl;
-	std::cout<<"Max {RelMaxError_i | i = 0, ..., 1e6} all of the tests: "<<maxRelAllofTest << std::endl;
-	std::cout<< "----------------------------------------------------" << std::endl;
+	return pair<fp_t,fp_t>(max_absolute_error,max_relative_error);
 }
 
 int main(int argc, const char * argv[]) {
-	testCubicAdv<float>(1'000'000, 1e-5);
+	float max_absolute_error = 0;
+	float max_relative_error = 0;
+	float absolute_error = 0;
+	float relative_error = 0;
+	int index_max_abs_err = 0;
+	int index_max_rel_err = 0;
+
+	std::cout.precision(11);
+
+	for (auto i = 0; i < 1'000'000; ++i) {
+
+		auto anw = testPolynomial<float>(3);
+		absolute_error = anw.first ;
+		relative_error = anw.second;
+
+		if (absolute_error > max_absolute_error){
+			max_absolute_error = absolute_error;
+			index_max_abs_err = i;
+		}
+
+		if (relative_error > max_relative_error){
+			max_relative_error = relative_error;
+			index_max_rel_err = i;
+		}
+	}
+
+	std::cout << "***max_absolute_error = " << max_absolute_error << " in test " << index_max_abs_err << std::endl;
+	std::cout << "***max_relative_error = " << max_relative_error << " in test " << index_max_rel_err << std::endl;
+
 	return 0;
 }

@@ -8,6 +8,7 @@
 #include "CubicPolynomial.hpp"
 #include <iostream>
 #include <vector>
+#include "Global.hpp"
 
 template<typename f_pt>
 CubicPolynomial<f_pt>::CubicPolynomial(std::complex<f_pt> b,

@@ -221,7 +221,7 @@ std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateAlpha1() {
 	const std::complex<f_pt> firstBracket = std::complex<f_pt>(static_cast<f_pt>(0.0L), A1) * pow(smallDeltaL, static_cast<f_pt>(1.0L / 3.0L));
 	const std::complex<f_pt> secondBracket = -d_0 * R1;
 
-	const f_pt argsDiff = std::arg(firstBracket) - std::arg(secondBracket);
+	const f_pt argsDiff = argp(firstBracket) - argp(secondBracket);
 
 	const std::complex<f_pt> result = alphaCoefficient * exp(std::complex<f_pt>(static_cast<f_pt>(0.0L), argsDiff));
 
@@ -235,7 +235,7 @@ std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateAlpha2() {
 	const std::complex<f_pt> firstBracket = A2 * pow(smallDeltaL, static_cast<f_pt>(2.0L / 3.0L));
 	const std::complex<f_pt> secondBracket = d_0 * d_0 * R2;
 
-	const f_pt argsDiff = std::arg(firstBracket) - std::arg(secondBracket);
+	const f_pt argsDiff = argp(firstBracket) - argp(secondBracket);
 
 	const std::complex<f_pt> result = alphaCoefficient * exp(std::complex<f_pt>(static_cast<f_pt>(0.0L), argsDiff));
 
