@@ -32,26 +32,25 @@ void CubicPolynomialFMA<f_pt>::calculateAllCoefficients(f_pt b, f_pt c, f_pt d) 
 	cubeOfd = pow(d, 3);
 	const f_pt delta0 = calculateDelta0();
 
-	sqrtOfDelta0 = (delta0 > 0) ? sqrt(delta0) : std::complex<f_pt>(0, sqrt(abs(delta0)));
+	sqrtOfDelta0 = (delta0 > 0) ? sqrt(delta0) : std::complex<f_pt>(0, sqrt(fabs(delta0)));
 
 	d_0 = calculateD0();
-	coefficient = std::complex<f_pt>(static_cast<f_pt>(0.0L),
-									 sqrt(static_cast<f_pt>(3.0L)) / static_cast<f_pt>(9.0L));
+	coefficient = std::complex<f_pt>(static_cast<f_pt>(0.0L), sqrt(static_cast<f_pt>(3.0L)) / static_cast<f_pt>(9.0L));
 
 	smallDeltaL = calculateSmallDeltaL();
 	A1 = calculateA1();
 	A2 = calculateA2();
 	R1 = calculateR(true);
 	R2 = calculateR(false);
-	alphaCoefficient = pow(static_cast<f_pt>(4.0L), static_cast<f_pt>(1.0L) / static_cast<f_pt>(3.0L)) / static_cast<f_pt>(2.0L);
+	alphaCoefficient = pow(static_cast<f_pt>(4.0L), static_cast<f_pt>(1.0L / 3.0L)) / static_cast<f_pt>(2.0L);
 	alpha1 = calculateAlpha1();
 	alpha2 = calculateAlpha2();
 }
 
 template<typename f_pt>
 std::vector<std::complex<f_pt>> CubicPolynomialFMA<f_pt>::calculateRoots() {
-	const std::complex<f_pt> ms1 = { static_cast<f_pt>(-1.0L), static_cast<f_pt>(0.0L) };
-	const std::complex<f_pt> ms2 = { static_cast<f_pt>(1.0L) / static_cast<f_pt>(2.0L), static_cast<f_pt>(-sqrt(3.0L) / static_cast<f_pt>(2.0L)) };
+	const std::complex<f_pt> ms1 = {static_cast<f_pt>(-1.0L), static_cast<f_pt>(0.0L)};
+	const std::complex<f_pt> ms2 = {static_cast<f_pt>(0.5L), static_cast<f_pt>(-sqrt(3.0L) / 2.0L)};
 	const std::complex<f_pt> ms3 = std::conj(ms2);
 
 	const std::vector<std::complex<f_pt>> ms = {ms1, ms2, ms3};
@@ -117,8 +116,8 @@ f_pt CubicPolynomialFMA<f_pt>::calculateDeltaL() {
 	const f_pt helper3 = pr_product_difference(squareOfC, helper1, static_cast<f_pt>(-3.0L) * b, helper2);
 
 	const f_pt biquadrateOfBc_6squareOfD = pr_product_difference(biquadrateOfB, c, static_cast<f_pt>(6.0L), squareOfD);
-	const f_pt helper4 = std::fma(static_cast<f_pt>(12.0L) * c, biquadrateOfBc_6squareOfD, squareOfb * squareOfD);
-	const f_pt helper5 = std::fma(static_cast<f_pt>(97.0L) * squareOfb, squareOfC, static_cast<f_pt>(9.0L) * squareOfD);
+	const f_pt helper4 = pr_product_difference(static_cast<f_pt>(12.0L) * c, biquadrateOfBc_6squareOfD, -squareOfb, squareOfD);
+	const f_pt helper5 = pr_product_difference(static_cast<f_pt>(97.0L) * squareOfb, squareOfC, static_cast<f_pt>(9.0L), squareOfD);
 
 	const f_pt helper6 = pr_product_difference(static_cast<f_pt>(2.0L) * b, helper4, static_cast<f_pt>(-3.0L) * d, helper5);
 
@@ -137,7 +136,7 @@ std::complex<f_pt> CubicPolynomialFMA<f_pt>::calculateSmallDeltaL() {
 
 	const f_pt bcd = std::fma(b, c, -d);
 	const f_pt _2cubeOfCd = std::fma(static_cast<f_pt>(2.0L), cubeOfC, squareOfD);
-	const f_pt secondBracket = std::fma(static_cast<f_pt>(4.0L) * b * c, bcd, _2cubeOfCd);
+	const f_pt secondBracket = pr_product_difference(static_cast<f_pt>(4.0L) * b, c, bcd, _2cubeOfCd);
 
 	const std::complex<f_pt> result = complex_pr_product_difference(firstBracketSqrtOfDelta0,
 																	std::complex<f_pt>(secondBracket, 0),
@@ -184,11 +183,10 @@ f_pt CubicPolynomialFMA<f_pt>::calculateA2() {
 	const f_pt _10bc_3d = pr_product_difference(static_cast<f_pt>(10.0L) * b, c, static_cast<f_pt>(3.0L), d);
 	const f_pt secondHalf = pr_product_difference(squareOfC, _8squareOfB_c, d, _10bc_3d);
 
-	const f_pt result = cfma(-std::complex<f_pt>(static_cast<f_pt>(0.0L), static_cast<f_pt>(sqrt(3.0L))) * sqrtOfDelta0,
-												std::complex<f_pt>(secondHalf, static_cast<f_pt>(0.0L)),
-												std::complex<f_pt>(firstHalf, static_cast<f_pt>(0.0L))).real();
-
-//	std::cout << "A2 fma = " << result1 << std::endl;
+	const f_pt result = complex_pr_product_difference(-std::complex<f_pt>(static_cast<f_pt>(0.0L), static_cast<f_pt>(sqrt(3.0L))),
+													  sqrtOfDelta0,
+													  std::complex<f_pt>(secondHalf, static_cast<f_pt>(0.0L)),
+													  std::complex<f_pt>(firstHalf, static_cast<f_pt>(0.0L))).real();
 
 	return result;
 }

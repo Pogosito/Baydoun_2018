@@ -26,6 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		042B631C297DAECE00AC8D75 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		0466E6E0294B5FC800ABDFDF /* CubicPolynomialFMA.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = CubicPolynomialFMA.tpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		0466E6E1294B5FC900ABDFDF /* CubicPolynomialFMA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CubicPolynomialFMA.hpp; sourceTree = "<group>"; };
 		04798278292AEC1100248C4D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -88,6 +89,7 @@
 		048F6E03290A977400F9EBDB /* Baydoun_2018 */ = {
 			isa = PBXGroup;
 			children = (
+				042B631C297DAECE00AC8D75 /* CMakeLists.txt */,
 				048F6E04290A977400F9EBDB /* main.cpp */,
 				0466E6DF294B5FB600ABDFDF /* CubicPolynomialFMA */,
 				047982922932214600248C4D /* Excerpt */,
