@@ -114,9 +114,9 @@ auto testPolynomial(unsigned int roots_count) {
 
 	auto result = compare_roots_complex<fp_t>(roots_computed.size(), roots.size(), roots_computed, roots, max_absolute_error, max_relative_error);
 
-	if (abs(max_relative_error) > 1)
-		cout << "Error rel = " << max_relative_error << " for coef " << endl << coefficients[0] <<
-		endl << coefficients[1] << endl << coefficients[2] << endl << coefficients[3] << endl << coefficients[4];
+//	if (abs(max_relative_error) > 1)
+//		cout << "Error rel = " << max_relative_error << " for coef " << endl << coefficients[0] <<
+//		endl << coefficients[1] << endl << coefficients[2] << endl << coefficients[3] << endl << coefficients[4];
 
 	return pair<fp_t,fp_t>(max_absolute_error,max_relative_error);
 }

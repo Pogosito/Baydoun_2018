@@ -3,22 +3,4 @@
    uuid = "BB03F549-8E6C-490A-BDF0-44A722938B55"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "BFD90571-9CE8-459D-A58D-7953A223132D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Baydoun_2018/excerpt.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "generate_polynomial(P, N_pairs_of_complex_roots, N_clustered_roots, N_multiple_roots, max_distance_between_clustered_roots, root_sweep_low, root_sweep_high, roots, coefficients)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>
