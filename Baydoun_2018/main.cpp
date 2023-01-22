@@ -5,6 +5,15 @@
 //  Created by Pogos Anesyan on 27.10.2022.
 //
 
+/*
+ Реализация метода вычисления корней кубического многочлена с помощью аналитической формулы из статьи "Analytical formula for the roots of the general complex cubic polynomial" Автора Ibrahim Baydoun
+
+ Представлены две реализации метода.
+
+ 1. Полный повтор статьи, которую можно найти в этом репозитории или же по ссылке https://hal.science/hal-01237234/document
+ 2. С использованием функции fma для более точных вычислений
+ */
+
 #include <iostream>
 #include <vector>
 #include "CubicPolynomialFMA.hpp"
