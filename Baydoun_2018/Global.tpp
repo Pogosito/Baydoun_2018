@@ -55,9 +55,9 @@ fp_t argp(std::complex<fp_t> inp) {
 	fp_t x = std::real(inp);
 	fp_t y = std::imag(inp);
 	if (x > 0)
-		return std::atan2f(y, x);
+		return std::atan2(y, x);
 	else{
 		fp_t _pi = y < 0 ? -M_PI : M_PI;
-		return x == 0 ? _pi / static_cast<fp_t>(2.0L) : std::atan2f(y, x) + _pi;
+		return x == 0 ? _pi / static_cast<fp_t>(2.0L) : std::atan2(y, x) + _pi;
 	}
 }

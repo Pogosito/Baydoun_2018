@@ -32,7 +32,7 @@ void CubicPolynomialFMA<f_pt>::calculateAllCoefficients(f_pt b, f_pt c, f_pt d) 
 	cubeOfd = pow(d, 3);
 	const f_pt delta0 = calculateDelta0();
 
-	sqrtOfDelta0 = (delta0 > 0) ? sqrt(delta0) : std::complex<f_pt>(0, sqrt(fabs(delta0)));
+	sqrtOfDelta0 = (delta0 > 0) ? sqrt(delta0) : std::complex<f_pt>(0, sqrt(abs(delta0)));
 
 	d_0 = calculateD0();
 	coefficient = std::complex<f_pt>(static_cast<f_pt>(0.0L), sqrt(static_cast<f_pt>(3.0L)) / static_cast<f_pt>(9.0L));
