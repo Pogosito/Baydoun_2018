@@ -102,45 +102,18 @@ void smallTest() {
 }
 
 template<typename fp_t>
-inline complex<fp_t> epsilonComplex(const complex<fp_t> &x)
-{
-	return abs(x) * numeric_limits<fp_t>::epsilon() > abs(x.imag()) ? complex<fp_t>(x.real(), 0) : x;
-}
-
-template<typename fp_t>
 auto testPolynomial(unsigned int roots_count) {
+
 	fp_t max_absolute_error;
 	fp_t max_relative_error;
 
 	vector<fp_t> roots(roots_count), coefficients(roots_count + 1);
-	vector<fp_t> rootsHelper(roots_count);
 
 	generate_polynomial<fp_t>(roots_count, 0, roots_count, 0, 1e-5, -1, 1, roots, coefficients);
 
 	vector<complex<fp_t>> roots_computed = CubicPolynomialFMA<fp_t>(coefficients[2], coefficients[1], coefficients[0]).calculateRoots();
 
-	roots_computed[0] = epsilonComplex(roots_computed[0]);
-	roots_computed[1] = epsilonComplex(roots_computed[1]);
-	roots_computed[2] = epsilonComplex(roots_computed[2]);
-
-//	if (roots_computed[0].imag())
-//		roots_computed[0] = complex<fp_t>();
-//
-//	if (roots_computed[1].imag())
-//		roots_computed[1] = complex<fp_t>();
-//
-//	if (roots_computed[2].imag())
-//		roots_computed[2] = complex<fp_t>();
-//
-//	rootsHelper.push_back(roots_computed[0].real());
-//	rootsHelper.push_back(roots_computed[1].real());
-//	rootsHelper.push_back(roots_computed[2].real());
-
-	auto result = compare_roots_complex<fp_t>(rootsHelper.size(), roots.size(), roots_computed, roots, max_absolute_error, max_relative_error);
-
-//	if (abs(max_relative_error) > 1)
-//		cout << "Error rel = " << max_relative_error << " for coef " << endl << coefficients[0] <<
-//		endl << coefficients[1] << endl << coefficients[2] << endl << coefficients[3] << endl << coefficients[4];
+	auto result = compare_roots_complex<fp_t>(roots_computed.size(), roots.size(), roots_computed, roots, max_absolute_error, max_relative_error);
 
 	return pair<fp_t,fp_t>(max_absolute_error,max_relative_error);
 }
